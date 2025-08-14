@@ -7,14 +7,18 @@ import path from 'path';
 import fs from 'fs';
 import chalk from 'chalk';
 import { createNewCommand } from '../core/cretaeCommands.js';
+import { processArgs } from '../core/detailsDevPilot.js';
 
 // Carrega o YAML
 const configPath = path.resolve(process.cwd(), 'devpilot.config.yaml');
 const config = yaml.load(fs.readFileSync(configPath, 'utf8')) as any;
 
 const main = async () => {
-  intro(chalk.bgHex('#0B0F2D').white(`🚀 Bem vindo(a) ao ${config.name} 🌌`));
+  const handled = await processArgs(process.argv);
+  if(handled) return;
 
+  intro(chalk.bgHex('#0B0F2D').white(`🚀 Bem vindo(a) ao ${config.name} 🌌`));
+  
   let runnig = true;
 
   while (runnig) {
