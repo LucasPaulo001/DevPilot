@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx tsx watch src/cli/index.ts",
     "build": "tsc",
-    "start": "node dist/src/cli/index.js",
+    "start": "node dist/cli/index.js",
     "check:prettier": "npx prettier . --check",
     "write:prettier": "npx prettier . --write"
   },
@@ -28,7 +28,7 @@
   "dependencies": {
     "@clack/prompts": "^0.11.0",
     "axios": "^1.11.0",
-    "calk": "^0.0.1-security",
+    "chalk": "^5.5.0",
     "execa": "^9.6.0",
     "express": "^5.1.0",
     "js-yaml": "^4.1.0",
@@ -36,6 +36,7 @@
     "zod": "^4.0.17"
   },
   "devDependencies": {
+    "@types/chalk": "^0.4.31",
     "@types/express": "^5.0.3",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.2.1",

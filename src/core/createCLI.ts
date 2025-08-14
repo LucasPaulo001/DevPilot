@@ -1,9 +1,12 @@
-import { outro, intro, text } from '@clack/prompts';
+import { outro, intro, text, log } from '@clack/prompts';
+import chalk from 'chalk';
+import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
+//função para criação da base do diretório CLI
 export const createCLI = async () => {
-  intro('Criação de CLI:');
+  intro('\nCriação de CLI 📁:');
 
   const existPath: string[] = fs
     .readdirSync(process.cwd())
@@ -20,7 +23,7 @@ export const createCLI = async () => {
       }
 
       if (existPath.includes(value.trim())) {
-        return 'Essa pasta já existe!';
+        return chalk.hex('#FFA500')('⚠️ Essa pasta já existe!');
       }
     },
   });
@@ -86,6 +89,22 @@ main();
 
   fs.writeFileSync(destinePkg, JSON.stringify(pkg, null, 2), 'utf8');
 
+  //Criação do arquivo yaml
+  const destineYaml = path.join(
+    rootPath,
+    String(pathName),
+    'devpilot.config.yaml',
+  );
+  const yaml = `name: ${String(pathName)}
+description: CLI gerada pelo DevPilot
+version: 1.0.0
+commands:
+  - hello
+  - ping
+  `;
+
+  fs.writeFileSync(destineYaml, yaml, 'utf8');
+
   //Criação do tsconfig
   const destineTsconfig = path.join(
     rootPath,
@@ -114,10 +133,33 @@ main();
   const commandsPath = path.join(rootPath, String(pathName), 'src', 'commands');
   fs.mkdirSync(commandsPath, { recursive: true });
 
+  //Criação de comandos
+
+  //Hello
+  fs.writeFileSync(
+    path.join(commandsPath, 'hello.ts'),
+    `export default async function() { console.log("Olá, mundo!"); }`,
+    'utf8',
+  );
+
+  //ping
+  fs.writeFileSync(
+    path.join(commandsPath, 'ping.ts'),
+    `export default async function() { console.log("Pong!"); }`,
+    'utf8',
+  );
+
+  //Encaminhando a pasta do projeto para o build
+  const cliPath = path.join(process.cwd(), String(pathName));
+
+  // Geramdo dist do CLI criado
+  execSync('npm run build', { cwd: cliPath, stdio: 'inherit' });
+  log.info(chalk.green('Gerando build do CLI...'));
+
   outro(
-    `CLI criado com sucesso em: "${String(pathName)}"\n
+    chalk.whiteBright(`CLI criado com sucesso em: "${String(pathName)}"\n
     Execute agora:\n
     cd ${String(pathName)}\n
-    npm install`,
+    npm install`),
   );
 };
