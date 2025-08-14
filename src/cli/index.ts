@@ -6,8 +6,9 @@ import yaml from 'js-yaml';
 import path from 'path';
 import fs from 'fs';
 import chalk from 'chalk';
-import { createNewCommand } from '../core/cretaeCommands.js';
+import { createNewCommand } from '../core/createCommands.js';
 import { processArgs } from '../core/detailsDevPilot.js';
+import { dir } from 'console';
 
 // Carrega o YAML
 const configPath = path.resolve(process.cwd(), 'devpilot.config.yaml');
@@ -45,6 +46,11 @@ const main = async () => {
           const ignored = ['node_modules', 'src', 'dist'];
           return isDir && !isHidden && !ignored.includes(f);
         });
+
+        if(dirs.length === 0){
+          log.error("Não tem nenhum CLI por aqui ainda...");
+          break;
+        }
 
         const cliToOpen = await select({
           message: 'Escolha um CLI para abrir:',
