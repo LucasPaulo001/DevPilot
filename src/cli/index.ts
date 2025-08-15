@@ -9,10 +9,22 @@ import chalk from 'chalk';
 import { createNewCommand } from '../core/createCommands.js';
 import { processArgs } from '../core/detailsDevPilot.js';
 import { dir } from 'console';
+import { any } from 'zod';
 
 // Carrega o YAML
 const configPath = path.resolve(process.cwd(), 'devpilot.config.yaml');
-const config = yaml.load(fs.readFileSync(configPath, 'utf8')) as any;
+let config: any = {};
+
+if (fs.existsSync(configPath)) {
+  const fileContents = fs.readFileSync(configPath, "utf-8");
+  config = yaml.load(fileContents);
+} else {
+  console.log("⚠️  Arquivo devpilot.config.yaml não encontrado. Usando configurações padrão.");
+  config = {
+    cliName: "default-cli",
+    author: "desconhecido"
+  };
+}
 
 const main = async () => {
   const handled = await processArgs(process.argv);

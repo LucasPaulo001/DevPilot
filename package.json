@@ -1,12 +1,13 @@
 {
-  "name": "devpilot",
-  "version": "1.0.0",
+  "name": "devpilot-core",
+  "version": "1.0.1",
   "description": "DevPilot é uma ferramenta de linha de comando (CLI) modular e extensível para desenvolvedores, que centraliza e automatiza tarefas do dia a dia no desenvolvimento de software — como criar projetos, rodar testes, fazer deploys e integrar com serviços externos — tudo num único lugar, com suporte a plugins que a comunidade pode criar e compartilhar.",
   "main": "dist/cli/index.js",
   "scripts": {
     "dev": "npx tsx watch src/cli/index.ts",
     "build": "tsc",
     "start": "node dist/cli/index.js",
+    "prepublishOnly": "npm run build",
     "check:prettier": "npx prettier . --check",
     "write:prettier": "npx prettier . --write"
   },
@@ -45,5 +46,8 @@
     "prettier": "^3.6.2",
     "tsx": "^4.20.4",
     "typescript": "^5.9.2"
-  }
+  },
+  "files": [
+   "dist/**/*"
+  ]
 }

@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { registerCLIs } from './registerCLIs.js';
 
 //função para criação da base do diretório CLI
 export const createCLI = async () => {
@@ -27,6 +28,11 @@ export const createCLI = async () => {
       }
     },
   });
+
+  const pathDestineCLI = path.join(process.cwd(), String(pathName));
+
+  //Armazenando credenciais do CLI no devpilot-cli.json
+  await registerCLIs(String(pathName), pathDestineCLI);
 
   //Comando base para o novo CLI criado
   const data = `#!/usr/bin/env node
