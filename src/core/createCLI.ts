@@ -83,6 +83,7 @@ main();
     },
     dependencies: {
       '@clack/prompts': '^0.11.0',
+      "chalk": "^5.5.0"
     },
     devDependencies: {
       typescript: '^5.9.2',

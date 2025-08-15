@@ -8,8 +8,6 @@ import fs from 'fs';
 import chalk from 'chalk';
 import { createNewCommand } from '../core/createCommands.js';
 import { processArgs } from '../core/detailsDevPilot.js';
-import { dir } from 'console';
-import { any } from 'zod';
 
 // Carrega o YAML
 const configPath = path.resolve(process.cwd(), 'devpilot.config.yaml');
@@ -30,7 +28,7 @@ const main = async () => {
   const handled = await processArgs(process.argv);
   if(handled) return;
 
-  intro(chalk.bgHex('#0B0F2D').white(`🚀 Bem vindo(a) ao ${config.name} 🌌`));
+  intro(chalk.bgHex('#0B0F2D').white(`🚀 Bem vindo(a) ao Devpilot 🌌`));
   
   let runnig = true;
 
