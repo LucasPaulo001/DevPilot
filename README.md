@@ -8,7 +8,8 @@ DevPilot é um **gerador de CLIs** que permite criar, abrir e gerenciar CLIs de 
 - Adicionar comandos aos CLIs existentes.  
 - Flags globais:
   - `--help` para exibir instruções.
-  - `--version` para ver a versão do DevPilot.  
+  - `--version` para ver a versão do DevPilot.
+  - `--doc` para exibir documentação
 - Build automático para cada CLI criado.  
 
 ## Como usar
@@ -47,4 +48,20 @@ node dist/cli/index.js --v
 ou
 ```bash
 node dist/cli/index.js --version
+```
+
+---
+
+## Usando o DevPilot a partir do npm
+1. Baixe o DevPilot globalmente
+```bash
+npm install devpilot-core -g
+```
+2. Abra seu projeto onde ficará o cli e instale o clack (Lib para funcionamento do questionário)
+```bash
+npm install @clack/prompts
+```
+3. Agora inicialize o devpilot e crie o projeto base para o seu CLI
+```bash
+devpilot
 ```
