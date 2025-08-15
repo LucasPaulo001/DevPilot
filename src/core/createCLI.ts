@@ -163,10 +163,10 @@ commands:
   execSync('npm run build', { cwd: cliPath, stdio: 'inherit' });
   log.info(chalk.green('Gerando build do CLI...'));
 
+  execSync('npm install', { cwd: cliPath, stdio: 'inherit' });
+  log.info(chalk.green("Instalando dependências..."));
+
   outro(
-    chalk.whiteBright(`CLI criado com sucesso em: "${String(pathName)}"\n
-    Execute agora:\n
-    cd ${String(pathName)}\n
-    npm install`),
+    chalk.whiteBright(`CLI criado com sucesso em: "${String(pathName)}"\n`),
   );
 };
