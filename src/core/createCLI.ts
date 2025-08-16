@@ -64,7 +64,7 @@ main();
   //Criação do package.json
   const destinePkg = path.join(rootPath, String(pathName), 'package.json');
   const pkg = {
-    name: 'meu-cli',
+    name: `${String(pathName)}`,
     version: '1.0.0',
     description: 'CLI gerada pelo DevPilot',
     main: 'dist/cli/index.js',
@@ -159,12 +159,13 @@ commands:
   //Encaminhando a pasta do projeto para o build
   const cliPath = path.join(process.cwd(), String(pathName));
 
-  // Geramdo dist do CLI criado
-  execSync('npm run build', { cwd: cliPath, stdio: 'inherit' });
-  log.info(chalk.green('Gerando build do CLI...'));
-
+  //Instalando dependências do CLI
   execSync('npm install', { cwd: cliPath, stdio: 'inherit' });
   log.info(chalk.green('Instalando dependências...'));
+
+  // Gerando dist do CLI criado
+  execSync('npm run build', { cwd: cliPath, stdio: 'inherit' });
+  log.info(chalk.green('Gerando build do CLI...'));
 
   outro(
     chalk.whiteBright(`CLI criado com sucesso em: "${String(pathName)}"\n`),

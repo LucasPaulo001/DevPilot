@@ -1,15 +1,44 @@
 import { log } from '@clack/prompts';
 import chalk from 'chalk';
+import boxen from 'boxen';
 
 export const help = async () => {
-  log.info(chalk.blueBright('🚀 DevPilot help\n'));
+  console.clear();
 
-  console.log(chalk.magenta('Comandos Disponíveis:'));
-  console.log('--help     =>       Mostrar essa ajuda');
-  console.log('--v ou --version   =>       Mostrar versão do DevPilot-core');
-  console.log('--doc        =>       Ter acesso à documentação');
-  console.log(chalk.magenta('\nFuncionalidades atuais do DevPilot:'));
-  console.log('Criar um novo projeto CLI');
-  console.log('Criar um novo comando para o seu CLI');
+  const title = chalk.bold.white('DevPilot Help 🚀');
+
+  const commands = `
+${chalk.cyan('--help')}           Mostrar esta ajuda
+${chalk.cyan('--v, --version')}  Mostrar versão do DevPilot-core
+${chalk.cyan('--doc')}            Abrir documentação
+${chalk.cyan('--publish-npm')}    Publicar CLI no npm
+`;
+
+  const features = `
+➡ Criar um novo projeto CLI
+➡ Criar um novo comando para o seu CLI
+➡ Publicação no npm
+`;
+
+  const boxContent = `
+${title}
+
+Comandos Disponíveis:
+${commands}
+
+Funcionalidades:
+${features}
+`;
+
+  const box = boxen(boxContent, {
+    padding: 1,
+    margin: 1,
+    borderStyle: 'round',
+    borderColor: 'gray',
+  });
+
+  console.log(box);
+  log.info('Use DevPilot para acelerar sua produtividade!');
 };
+
 

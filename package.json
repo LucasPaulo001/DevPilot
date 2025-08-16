@@ -29,6 +29,7 @@
   "dependencies": {
     "@clack/prompts": "^0.11.0",
     "axios": "^1.11.0",
+    "boxen": "^8.0.1",
     "chalk": "^5.5.0",
     "cryptojs": "^2.5.3",
     "execa": "^9.6.0",
@@ -48,6 +49,6 @@
     "typescript": "^5.9.2"
   },
   "files": [
-   "dist/**/*"
+    "dist/**/*"
   ]
 }
