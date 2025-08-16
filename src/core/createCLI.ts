@@ -3,18 +3,19 @@ import chalk from 'chalk';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { registerCLIs } from './registerCLIs.js';
 
 //função para criação da base do diretório CLI
 export const createCLI = async () => {
   intro('\nCriação de CLI 📁:');
 
+  //Verificando se já não existe um CLI com o mesmo nome no projeto
   const existPath: string[] = fs
     .readdirSync(process.cwd())
     .filter((item) =>
       fs.statSync(path.join(process.cwd(), item)).isDirectory(),
     );
 
+  // Nome da pasta onde será armazenado o CLI
   const pathName = await text({
     message: 'Nomeie uma pasta para armazenar o CLI no DevPilot:',
     placeholder: './meu-cli',
@@ -28,11 +29,6 @@ export const createCLI = async () => {
       }
     },
   });
-
-  const pathDestineCLI = path.join(process.cwd(), String(pathName));
-
-  //Armazenando credenciais do CLI no devpilot-cli.json
-  await registerCLIs(String(pathName), pathDestineCLI);
 
   //Comando base para o novo CLI criado
   const data = `#!/usr/bin/env node
@@ -83,11 +79,15 @@ main();
     },
     dependencies: {
       '@clack/prompts': '^0.11.0',
-      "chalk": "^5.5.0"
+      chalk: '^5.5.0',
+      express: '^5.1.0',
     },
     devDependencies: {
       typescript: '^5.9.2',
       tsx: '^4.7.0',
+      '@types/express': '^5.0.3',
+      '@types/chalk': '^0.4.31',
+      '@types/node': '^24.2.1',
     },
     keywords: ['cli', 'devpilot'],
     author: '',
@@ -164,7 +164,7 @@ commands:
   log.info(chalk.green('Gerando build do CLI...'));
 
   execSync('npm install', { cwd: cliPath, stdio: 'inherit' });
-  log.info(chalk.green("Instalando dependências..."));
+  log.info(chalk.green('Instalando dependências...'));
 
   outro(
     chalk.whiteBright(`CLI criado com sucesso em: "${String(pathName)}"\n`),
