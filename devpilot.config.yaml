@@ -1,0 +1,6 @@
+name: DevPilot
+commands:
+  - hello
+  - ping
+settings:
+  useColors: true
