@@ -3,6 +3,8 @@ import { help } from '../commands/help.js';
 import fs from "fs"
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
+import { execSync } from 'child_process';
+import { log } from '@clack/prompts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.join(__filename);
@@ -28,6 +30,14 @@ export const processArgs = async (argv: string[]): Promise<boolean> => {
     if(args.includes("--doc")){
         console.log("📖 Documentação DevPilot-core:")
         console.log(chalk.magenta("https://github.com/LucasPaulo001/DevPilot/tree/feature-devp/configs"));
+        process.exit(0);
+    }
+
+    //Flag para atualizar o devpilot
+    if(args.includes("--update")){
+        log.info("Atualizando o Devpilot...");
+        execSync(`npm install devpilot-core -g`, { stdio: "ignore" });
+        log.success(chalk.green.bold("Devpilot atualizado com sucesso! 🚀"));
         process.exit(0);
     }
     

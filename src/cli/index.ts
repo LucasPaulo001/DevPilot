@@ -8,6 +8,7 @@ import fs from 'fs';
 import chalk from 'chalk';
 import { createNewCommand } from '../core/createCommands.js';
 import { processArgs } from '../core/detailsDevPilot.js';
+import { processArgsAction } from "../core/actionsCLI.js";
 
 // Carrega o YAML
 const configPath = path.resolve(process.cwd(), 'devpilot.config.yaml');
@@ -27,6 +28,9 @@ if (fs.existsSync(configPath)) {
 const main = async () => {
   const handled = await processArgs(process.argv);
   if(handled) return;
+
+  const handledCLI = await processArgsAction(process.argv);
+  if(handledCLI) return;
 
   intro(chalk.bgHex('#0B0F2D').white(`🚀 Bem vindo(a) ao Devpilot 🌌`));
   
