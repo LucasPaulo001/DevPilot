@@ -12,6 +12,7 @@
 - [Flags](#flags)
 - [Usando a partir do NPM](#npm)
 - [Criando CLI](#criando_cli)
+- [Versão 1.0.5](#v_1_0_5)
   
 </details>
 
@@ -127,6 +128,18 @@ meu-cli
 >  
 > A pasta **commands** é onde ficarão nossos comandos, ou seja, onde fica a automação que vamos construir para o CLI.
 
+---
+
+<h2 id="v_1_0_5">Versão 1.0.5 de 16/08/2025</h2>
+
+### Sobre a versão:
+
+|Funcionalidade                     | Descrição                                                                                                 |
+| --------------------------------- |-----------------------------------------------------------------------------------------------------------|
+|`Criação de Flags`                 | Agora o usuário pode gerar flags de formasimples, apenas pelo menu interativo!                            |
+|`Campo de ajuda do Devpilot`       |Janela de ajuda com visual novo                                                                            |
+|`Melhorias de inicialização do CLI`|Dependências baixadas juntamente com build do CLI gerado sem necessidade de instalação de dependência extra|
+
 </details>
 
 ---
@@ -142,6 +155,7 @@ meu-cli
 - [Flags](#flags)
 - [Using via NPM](#npm)
 - [Creating CLI](#creating_cli)
+- [Version 1.0.5](#v1_0_5)
   
 </details>
 
@@ -254,6 +268,17 @@ my-cli
 > This is where we will build the main questionnaire for commands.
 > 
 > The **commands** folder is where our commands will reside, meaning the automation we will build for the CLI.
+
+---
+
+<h2 id="v_1_0_5">Version 1.0.5 - 08/16/2025</h2>
+
+| Feature                           | Description                                                                          |
+| --------------------------------- | ------------------------------------------------------------------------------------ |
+| `Flag Creation`                   | Users can now generate flags easily through the interactive menu!                    |
+| `DevPilot Help Section`           | Updated help window with a new look                                                  |
+| `CLI Initialization Improvements` | Dependencies are installed together with the CLI build, no extra installation needed |
+
 
 </details>
 
