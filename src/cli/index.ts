@@ -10,6 +10,7 @@ import { createNewCommand } from '../core/createCommands.js';
 import { processArgs } from '../core/detailsDevPilot.js';
 import { processArgsAction } from '../core/actionsCLI.js';
 import { addFlag } from '../core/registerFlagsCLI.js';
+import { testImplement } from '../core/testImplement.js';
 
 // Carrega o YAML
 const configPath = path.resolve(process.cwd(), 'devpilot.config.yaml');
@@ -123,6 +124,7 @@ const openCLI = async (cliName: string) => {
   const commandOptions = [
     { value: '__create__', label: '➕ Criar novo comando' },
     { value: '__flag__', label: 'Adicionar flags' },
+    { value: '__tests__', label: 'Implementar testes' },
     ...commandFiles.map((file) => ({
       value: file.replace(/\.(ts|js)$/, ''),
       label: file.replace(/\.(ts|js)$/, ''),
@@ -144,11 +146,19 @@ const openCLI = async (cliName: string) => {
       continue;
     }
 
+    //Criação de flags
     if (commandName === '__flag__') {
       await addFlag(cliPath);
       continue;
     }
 
+    //Implementação de testes ao CLI
+    if(commandName === '__tests__'){
+      await testImplement(cliPath);
+      continue;
+    }
+
+    //Voltar
     if (commandName === '__voltar__') {
       running = false;
       continue;
