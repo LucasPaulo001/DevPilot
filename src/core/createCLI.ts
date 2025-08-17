@@ -33,8 +33,13 @@ export const createCLI = async () => {
   //Comando base para o novo CLI criado
   const data = `#!/usr/bin/env node
 import { intro, outro, log, select } from '@clack/prompts';
+import { processArgs } from "../flags/actions.js";
 
-async function main() {
+const main = async () => {
+
+  const handled = await processArgs(process.argv);
+  if (handled) return;
+
   intro('🚀 CLI Gerado pelo DevPilot');
 
   const action = await select({
@@ -130,7 +135,7 @@ commands:
       forceConsistentCasingInFileNames: true,
       skipLibCheck: true,
     },
-    include: ['src/**/*'],
+    "include": ["src/cli/**/*", "src/flags/**/*"],
     exclude: ['dist'],
   };
 
@@ -154,6 +159,27 @@ commands:
     path.join(commandsPath, 'ping.ts'),
     `export default async function() { console.log("Pong!"); }`,
     'utf8',
+  );
+
+
+  //Criação de pasta de lógica de flags
+  const flagsPath = path.join(rootPath, String(pathName), 'src', 'flags');
+  fs.mkdirSync(flagsPath, { recursive: true });
+
+  //Criando arquivo de flags para exemplo
+  fs.writeFileSync(
+    path.join(flagsPath, 'actions.ts'),
+`export const processArgs = async (argv: string[]): Promise<boolean> => { 
+  try {
+      const args = argv.slice(2);
+  
+      return false;
+    } catch (err: any) {
+      console.error(err);
+    }
+   
+    return false;
+}`
   );
 
   //Encaminhando a pasta do projeto para o build

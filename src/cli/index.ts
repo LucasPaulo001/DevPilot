@@ -8,32 +8,35 @@ import fs from 'fs';
 import chalk from 'chalk';
 import { createNewCommand } from '../core/createCommands.js';
 import { processArgs } from '../core/detailsDevPilot.js';
-import { processArgsAction } from "../core/actionsCLI.js";
+import { processArgsAction } from '../core/actionsCLI.js';
+import { addFlag } from '../core/registerFlagsCLI.js';
 
 // Carrega o YAML
 const configPath = path.resolve(process.cwd(), 'devpilot.config.yaml');
 let config: any = {};
 
 if (fs.existsSync(configPath)) {
-  const fileContents = fs.readFileSync(configPath, "utf-8");
+  const fileContents = fs.readFileSync(configPath, 'utf-8');
   config = yaml.load(fileContents);
 } else {
-  console.log("⚠️  Arquivo devpilot.config.yaml não encontrado. Usando configurações padrão.");
+  console.log(
+    '⚠️  Arquivo devpilot.config.yaml não encontrado. Usando configurações padrão.',
+  );
   config = {
-    cliName: "default-cli",
-    author: "desconhecido"
+    cliName: 'default-cli',
+    author: 'desconhecido',
   };
 }
 
 const main = async () => {
   const handled = await processArgs(process.argv);
-  if(handled) return;
+  if (handled) return;
 
   const handledCLI = await processArgsAction(process.argv);
-  if(handledCLI) return;
+  if (handledCLI) return;
 
   intro(chalk.bgHex('#0B0F2D').white(`🚀 Bem vindo(a) ao Devpilot 🌌`));
-  
+
   let runnig = true;
 
   while (runnig) {
@@ -61,8 +64,8 @@ const main = async () => {
           return isDir && !isHidden && !ignored.includes(f);
         });
 
-        if(dirs.length === 0){
-          log.error("Não tem nenhum CLI por aqui ainda...");
+        if (dirs.length === 0) {
+          log.error('Não tem nenhum CLI por aqui ainda...');
           break;
         }
 
@@ -119,11 +122,12 @@ const openCLI = async (cliName: string) => {
   // Opções de comandos
   const commandOptions = [
     { value: '__create__', label: '➕ Criar novo comando' },
+    { value: '__flag__', label: 'Adicionar flags' },
     ...commandFiles.map((file) => ({
       value: file.replace(/\.(ts|js)$/, ''),
       label: file.replace(/\.(ts|js)$/, ''),
     })),
-    { value: "__voltar__", label: "Voltar" }
+    { value: '__voltar__', label: 'Voltar' },
   ];
 
   //Escolher os comandos do CLI selecionado
@@ -133,18 +137,22 @@ const openCLI = async (cliName: string) => {
       message: `CLI: ${cliConfig.name} - Escolha um comando`,
       options: commandOptions,
     });
-  
+
     //Caso de criação de comando em CLI
-    if(commandName === "__create__"){
+    if (commandName === '__create__') {
       await createNewCommand(cliPath);
       continue;
     }
 
-    if(commandName === '__voltar__'){
-      running = false;
+    if (commandName === '__flag__') {
+      await addFlag(cliPath);
       continue;
     }
 
+    if (commandName === '__voltar__') {
+      running = false;
+      continue;
+    }
 
     //Caminho para os comandos
     const commadsDir = path.join(cliPath, 'dist', 'commands');

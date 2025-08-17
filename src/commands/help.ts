@@ -17,6 +17,7 @@ ${chalk.cyan('--publish-npm')}    Publicar CLI no npm
   const features = `
 ➡ Criar um novo projeto CLI
 ➡ Criar um novo comando para o seu CLI
+➡ Registrar flags ao CLI (Registro de Flags base)
 ➡ Publicação no npm
 `;
 
