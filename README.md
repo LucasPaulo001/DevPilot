@@ -81,11 +81,7 @@ node dist/cli/index.js --doc
 ```bash
 npm install devpilot-core -g
 ```
-2. Abra seu projeto onde ficará o cli e instale o clack (Lib para funcionamento do questionário)
-```bash
-npm install @clack/prompts
-```
-3. Agora inicialize o devpilot e crie o projeto base para o seu CLI
+2. Agora inicialize o devpilot e crie o projeto base para o seu CLI
 ```bash
 devpilot
 ```
@@ -223,11 +219,7 @@ node dist/cli/index.js --doc
 ```bash
 npm install devpilot-core -g
 ```
-2. Open your project where the CLI will reside and install Clack (library for questionnaire functionality)
-```bash
-npm install @clack/prompts
-```
-3. Initialize DevPilot and create the base project for your CLI
+2. Initialize DevPilot and create the base project for your CLI
 ```bash
 devpilot
 ```

@@ -31,6 +31,8 @@ export const testImplement = async (cliPath: string) => {
       if (selectTests.includes('system')) {
         await systemTest(testsPath);
       }
+
+      log.success("Testes base estruturados...");
     }
   } catch (err) {
     log.error(chalk.red(`Erro: ${err}`));

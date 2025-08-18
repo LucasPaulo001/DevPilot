@@ -1,4 +1,4 @@
-import { outro, intro, text, log } from '@clack/prompts';
+import { outro, intro, text, log, select, multiselect } from '@clack/prompts';
 import chalk from 'chalk';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -107,10 +107,140 @@ main();
 
   fs.writeFileSync(destinePkg, JSON.stringify(pkg, null, 2), 'utf8');
 
-  //Criação do gitignore
-  const destineGitIgnore = path.join(rootPath, String(pathName), '.gitignore');
+  //Criação do arquivo yaml
+  const destineYaml = path.join(
+    rootPath,
+    String(pathName),
+    'devpilot.config.yaml',
+  );
+  const yaml = `name: ${String(pathName)}
+description: CLI gerada pelo DevPilot
+version: 1.0.0
+commands:
+  - hello
+  - ping
+  `;
 
-  const gitignore = `# Logs
+  fs.writeFileSync(destineYaml, yaml, 'utf8');
+
+  //Criação do tsconfig
+  const destineTsconfig = path.join(
+    rootPath,
+    String(pathName),
+    'tsconfig.json',
+  );
+  const tsconfig = {
+    compilerOptions: {
+      target: 'ES2022',
+      module: 'ESNext',
+      moduleResolution: 'Node',
+      rootDir: 'src',
+      outDir: 'dist',
+      strict: true,
+      esModuleInterop: true,
+      forceConsistentCasingInFileNames: true,
+      skipLibCheck: true,
+    },
+    include: ['src/cli/**/*', 'src/flags/**/*', 'src/commands/**/*'],
+    exclude: ['dist'],
+  };
+
+  fs.writeFileSync(destineTsconfig, JSON.stringify(tsconfig, null, 2), 'utf8');
+
+  //Criação do diretório de comandos
+  const commandsPath = path.join(rootPath, String(pathName), 'src', 'commands');
+  fs.mkdirSync(commandsPath, { recursive: true });
+
+  //Criação de comandos
+
+  //Hello
+  fs.writeFileSync(
+    path.join(commandsPath, 'hello.ts'),
+    `export const hello = async () => { console.log("Olá, mundo!"); }`,
+    'utf8',
+  );
+
+  //ping
+  fs.writeFileSync(
+    path.join(commandsPath, 'ping.ts'),
+    `export const hello = async () => { console.log("Pong!"); }`,
+    'utf8',
+  );
+
+  //Criação de pasta de lógica de flags
+  const flagsPath = path.join(rootPath, String(pathName), 'src', 'flags');
+  fs.mkdirSync(flagsPath, { recursive: true });
+
+  //Criando arquivo de flags para exemplo
+  fs.writeFileSync(
+    path.join(flagsPath, 'actions.ts'),
+    `export const processArgs = async (argv: string[]): Promise<boolean> => { 
+  try {
+      const args = argv.slice(2);
+  
+      return false;
+    } catch (err: any) {
+      console.error(err);
+    }
+   
+    return false;
+}`,
+  );
+
+  //Encaminhando a pasta do projeto para o build
+  const cliPath = path.join(process.cwd(), String(pathName));
+
+  //Instalando dependências do CLI
+  execSync('npm install', { cwd: cliPath, stdio: 'ignore' });
+  log.success(chalk.green.bold("Dependências instaladas com sucesso!"));
+
+  //Arquivos adicionais
+  const defaultAchives = await multiselect({
+    message: 'Deseja adicionar os seguintes arquivos ao projeto?',
+    options: [
+      { value: 'gitignore', label: '.gitignore (padrão node)' },
+      { value: 'readme', label: 'README.md' },
+      { value: 'contributing', label: 'CONTRIBUTING.md' },
+    ],
+  });
+
+  //Redirecionando para a criação dos arquivos escolhidos
+  if (Array.isArray(defaultAchives)) {
+    log.info('Adicionando arquivo(s)');
+    if (defaultAchives.includes('gitignore')) {
+      await generateArchive('gitignore', String(pathName));
+    }
+
+    if (defaultAchives.includes('readme')) {
+      await generateArchive('readme', String(pathName));
+    }
+
+    if(defaultAchives.includes('contributing')){
+      await generateArchive('contributing', String(pathName));
+    }
+  }
+
+  // Gerando dist do CLI criado
+  execSync('npm run build', { cwd: cliPath, stdio: 'inherit' });
+  log.info(chalk.green('Gerando build do CLI...'));
+
+  outro(
+    chalk.whiteBright(`CLI criado com sucesso em: "${String(pathName)}"\n`),
+  );
+};
+
+//Gerando arquivos padrão
+const generateArchive = async (archive: string, pathName: string) => {
+  const rootPath = path.join(process.cwd());
+  if (archive === 'gitignore') {
+    //Criação do gitignore
+    const destineGitIgnore = path.join(
+      rootPath,
+      String(pathName),
+      '.gitignore',
+    );
+
+    const gitignore = `# Logs
 logs
 *.log
 npm-debug.log*
@@ -182,171 +312,66 @@ web_modules/
 .env.*
 !.env.example
 
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
-# Next.js build output
-.next
-out
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-
-# Gatsby files
-.cache/
-# Comment in the public line in if your project uses Gatsby and not Next.js
-# https://nextjs.org/blog/next-9-1#public-directory-support
-# public
-
-# vuepress build output
-.vuepress/dist
-
-# vuepress v2.x temp and cache directory
-.temp
-.cache
-
-# Sveltekit cache directory
-.svelte-kit/
-
-# vitepress build output
-**/.vitepress/dist
-
-# vitepress cache directory
-**/.vitepress/cache
-
-# Docusaurus cache and generated files
-.docusaurus
-
-# Serverless directories
-.serverless/
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# Firebase cache directory
-.firebase/
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-# yarn v3
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-# Vite logs files
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
   
   `;
 
-  //Escrevendo o conteúdo no arquivo
-  fs.writeFileSync(destineGitIgnore, gitignore, 'utf8');
+    //Escrevendo o conteúdo no arquivo
+    fs.writeFileSync(destineGitIgnore, gitignore, 'utf8');
+  }
 
-  //Criação do arquivo yaml
-  const destineYaml = path.join(
-    rootPath,
-    String(pathName),
-    'devpilot.config.yaml',
-  );
-  const yaml = `name: ${String(pathName)}
-description: CLI gerada pelo DevPilot
-version: 1.0.0
-commands:
-  - hello
-  - ping
-  `;
+  //Gerando o readme
+  if(archive === "readme"){
+    const destineReadme = path.join(rootPath, pathName, 'README.md');
+    const readme = `
+## ${pathName} **Gerado pelo Devpilot-core 👨🏽‍🚀**
 
-  fs.writeFileSync(destineYaml, yaml, 'utf8');
+Fale sobre o seu projeto!
 
-  //Criação do tsconfig
-  const destineTsconfig = path.join(
-    rootPath,
-    String(pathName),
-    'tsconfig.json',
-  );
-  const tsconfig = {
-    compilerOptions: {
-      target: 'ES2022',
-      module: 'ESNext',
-      moduleResolution: 'Node',
-      rootDir: 'src',
-      outDir: 'dist',
-      strict: true,
-      esModuleInterop: true,
-      forceConsistentCasingInFileNames: true,
-      skipLibCheck: true,
-    },
-    include: ['src/cli/**/*', 'src/flags/**/*'],
-    exclude: ['dist'],
-  };
+---
 
-  fs.writeFileSync(destineTsconfig, JSON.stringify(tsconfig, null, 2), 'utf8');
+## Instalação
 
-  //Criação do diretório de comandos
-  const commandsPath = path.join(rootPath, String(pathName), 'src', 'commands');
-  fs.mkdirSync(commandsPath, { recursive: true });
+Clone o repositório:
 
-  //Criação de comandos
-
-  //Hello
-  fs.writeFileSync(
-    path.join(commandsPath, 'hello.ts'),
-    `export const hello = async () => { console.log("Olá, mundo!"); }`,
-    'utf8',
-  );
-
-  //ping
-  fs.writeFileSync(
-    path.join(commandsPath, 'ping.ts'),
-    `export const hello = async () => { console.log("Pong!"); }`,
-    'utf8',
-  );
-
-  //Criação de pasta de lógica de flags
-  const flagsPath = path.join(rootPath, String(pathName), 'src', 'flags');
-  fs.mkdirSync(flagsPath, { recursive: true });
-
-  //Criando arquivo de flags para exemplo
-  fs.writeFileSync(
-    path.join(flagsPath, 'actions.ts'),
-    `export const processArgs = async (argv: string[]): Promise<boolean> => { 
-  try {
-      const args = argv.slice(2);
+- git clone https://github.com/SEU_USUARIO/${pathName}.git
+- cd ${pathName}
+- npm install
+    `
   
-      return false;
-    } catch (err: any) {
-      console.error(err);
-    }
-   
-    return false;
-}`,
-  );
+  fs.writeFileSync(destineReadme, readme, 'utf-8');
+  }
 
-  //Encaminhando a pasta do projeto para o build
-  const cliPath = path.join(process.cwd(), String(pathName));
+  if(archive === "contributing"){
+    const destineContributing = path.join(rootPath, pathName, 'CONTRIBUTING.md');
+    const contributing = `
+# Contribuindo com ${pathName} 🚀
 
-  //Instalando dependências do CLI
-  execSync('npm install', { cwd: cliPath, stdio: 'inherit' });
-  log.info(chalk.green('Instalando dependências...'));
+> Esse arquivo é apenas um exemplo, edite à vontade
 
-  // Gerando dist do CLI criado
-  execSync('npm run build', { cwd: cliPath, stdio: 'inherit' });
-  log.info(chalk.green('Gerando build do CLI...'));
+Obrigado por se interessar em contribuir com o **${pathName}**!  
+Queremos que este projeto seja útil para todos e acessível para iniciantes. 💻
 
-  outro(
-    chalk.whiteBright(`CLI criado com sucesso em: "${String(pathName)}"\n`),
-  );
+---
+
+## Como começar
+
+1. Faça um fork do repositório.
+2. Clone seu fork localmente:
+
+- git clone https://github.com/SEU_USUARIO/${pathName}.git
+- cd ${pathName}
+
+3. Instale as dependências:
+
+- npm install
+
+4. Rode o projeto localmente:
+
+- npm start
+
+    `
+
+  fs.writeFileSync(destineContributing, contributing, 'utf-8');
+  }
+
 };
