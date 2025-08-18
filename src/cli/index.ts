@@ -44,10 +44,10 @@ const main = async () => {
     const actions = await select({
       message: 'O que você deseja fazer?',
       options: [
-        { value: 'criar', label: 'Criar novo CLI' },
-        { value: 'abrir', label: 'Abrir CLI existente' },
-        { value: 'plugins', label: 'Gerenciar plugins' },
-        { value: 'sair', label: 'Sair' },
+        { value: 'criar', label: '🆕 Criar novo CLI' },
+        { value: 'abrir', label: '📂 Abrir CLI existente' },
+        { value: 'plugins', label: '🧩 Gerenciar plugins' },
+        { value: 'sair', label: '❌ Sair' },
       ],
     });
 
@@ -123,13 +123,13 @@ const openCLI = async (cliName: string) => {
   // Opções de comandos
   const commandOptions = [
     { value: '__create__', label: '➕ Criar novo comando' },
-    { value: '__flag__', label: 'Adicionar flags' },
-    { value: '__tests__', label: 'Implementar testes' },
+    { value: '__flag__', label: '⚑ Adicionar flags' },
+    { value: '__tests__', label: '🧪 Implementar testes' },
     ...commandFiles.map((file) => ({
       value: file.replace(/\.(ts|js)$/, ''),
-      label: file.replace(/\.(ts|js)$/, ''),
+      label: `📜 ${file.replace(/\.(ts|js)$/, '')}`,
     })),
-    { value: '__voltar__', label: 'Voltar' },
+    { value: '__voltar__', label: '< Voltar' },
   ];
 
   //Escolher os comandos do CLI selecionado
@@ -153,7 +153,7 @@ const openCLI = async (cliName: string) => {
     }
 
     //Implementação de testes ao CLI
-    if(commandName === '__tests__'){
+    if (commandName === '__tests__') {
       await testImplement(cliPath);
       continue;
     }
@@ -167,10 +167,10 @@ const openCLI = async (cliName: string) => {
     //Caminho para os comandos
     const commadsDir = path.join(cliPath, 'dist', 'commands');
     let commandPath = path.join(commadsDir, `${String(commandName)}.js`);
-    console.log(commandPath);
 
     const commandModule = await import(commandPath);
-    await commandModule.default();
+    const fnName = path.basename(commandPath, path.extname(commandPath)); 
+    await commandModule[fnName]();
 
     const again = await select({
       message: 'Deseja executar outro comando?',

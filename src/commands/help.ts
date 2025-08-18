@@ -21,6 +21,16 @@ ${chalk.cyan('--publish-npm')}    Publicar CLI no npm
 ➡ Publicação no npm
 `;
 
+  const rusts = `
+  ${chalk.bold('Sobre comandos')}:
+
+  Ao criar um novo comando mantenha a função com o mesmo
+  nome do arquivo, exemplo:
+
+  - Arquivo chamado ➡ ${chalk.magenta('/command.ts')}: A função principal do comando tem que seguir
+  como ➡ 'export const ${chalk.magenta('command')} = async () => {}'  
+  `
+
   const boxContent = `
 ${title}
 
@@ -29,6 +39,9 @@ ${commands}
 
 Funcionalidades:
 ${features}
+
+Regras de uso:
+${rusts}
 `;
 
   const box = boxen(boxContent, {

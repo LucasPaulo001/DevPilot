@@ -28,6 +28,7 @@ export const addFlag = async (cliPath: string) => {
   });
 
   if (flags) await registerFlag(String(flags), flagsPath, cliPath);
+  log.info(`Agora você pode ir em ${chalk.magenta('flags/')} e estruturar o conteúdo da flag!`)
 };
 
 //Registro de flag estruturada

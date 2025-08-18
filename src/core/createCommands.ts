@@ -16,7 +16,12 @@ export const createNewCommand = async (pathCli: string) => {
   const baseCommand = `import { confirm, intro, log } from '@clack/prompts';
 import chalk from 'chalk';
 
-export default async function newCommand_3684a639() {
+//Esse é um arquivo onde você pode editar, mudando o nome do arquivo
+//ou da função.
+
+//Caso não queira gerar esse arquivo pelo devpilot, você pode criar manualmente!
+
+export const newCommand_${id} = () => {
   intro(
     chalk.magenta(
       'Esse é o ponto de partida para a criação de novos comandos para o seu CLI!',

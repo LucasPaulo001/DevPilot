@@ -35,6 +35,16 @@ export const createCLI = async () => {
 import { intro, outro, log, select } from '@clack/prompts';
 import { processArgs } from "../flags/actions.js";
 
+/*
+Aqui é onde a estrutura principal do seu CLI é gerado
+Para uma melhor experiência é muito recomendável que dê uma olhada
+na documentação das seguintes libs
+
+=> Clack: https://github.com/bombshell-dev/clack
+=> Chalk: https://github.com/chalk/chalk
+
+*/
+
 const main = async () => {
 
   const handled = await processArgs(process.argv);
@@ -163,7 +173,7 @@ commands:
   //ping
   fs.writeFileSync(
     path.join(commandsPath, 'ping.ts'),
-    `export const hello = async () => { console.log("Pong!"); }`,
+    `export const ping = async () => { console.log("Pong!"); }`,
     'utf8',
   );
 

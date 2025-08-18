@@ -32,7 +32,8 @@ export const testImplement = async (cliPath: string) => {
         await systemTest(testsPath);
       }
 
-      log.success("Testes base estruturados...");
+      log.success(chalk.green.bold("🧪 Testes base estruturados..."));
+      log.info(`Verifique os scripts em ${chalk.magenta.bold('package.json')} para rodar o(s) teste(s)!`);
     }
   } catch (err) {
     log.error(chalk.red(`Erro: ${err}`));
