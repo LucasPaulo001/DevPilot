@@ -1,7 +1,8 @@
-import { log, multiselect, select } from '@clack/prompts';
+import { log, multiselect, spinner } from '@clack/prompts';
 import chalk from 'chalk';
 import path from 'path';
 import fs from 'fs';
+import { execSync } from 'child_process';
 
 //Estruturando testes no CLI
 export const testImplement = async (cliPath: string) => {
@@ -32,8 +33,10 @@ export const testImplement = async (cliPath: string) => {
         await systemTest(testsPath);
       }
 
-      log.success(chalk.green.bold("🧪 Testes base estruturados..."));
-      log.info(`Verifique os scripts em ${chalk.magenta.bold('package.json')} para rodar o(s) teste(s)!`);
+      log.success(chalk.green.bold('🧪 Testes base estruturados...'));
+      log.info(
+        `Verifique os scripts em ${chalk.magenta.bold('package.json')} para rodar o(s) teste(s)!`,
+      );
     }
   } catch (err) {
     log.error(chalk.red(`Erro: ${err}`));
@@ -47,7 +50,7 @@ const unitaryTest = async (testsPath: string) => {
   fs.mkdirSync(pathUnitaryTest, { recursive: true });
 
   //Estrutura do teste báse
-  const helloTest = path.join(pathUnitaryTest, "hello.test.ts");
+  const helloTest = path.join(pathUnitaryTest, 'hello.test.ts');
   const testeData = `import { describe, it, expect } from "vitest";
 import { hello } from "../../commands/hello.js";
 
@@ -59,10 +62,14 @@ import { hello } from "../../commands/hello.js";
     const result = await hello();
     expect(result).toBeUndefined();
    });
- });`
+ });`;
 
- fs.writeFileSync(helloTest, testeData, 'utf-8');
+  fs.writeFileSync(helloTest, testeData, 'utf-8');
 
+  const s = spinner();
+  s.start('Gerando o build do projeto...');
+  execSync(`npm run build`, { cwd: process.cwd() });
+  s.stop(chalk.green('Build gerado com sucesso!'));
 };
 
 const integrationTest = async (testsPath: string) => {

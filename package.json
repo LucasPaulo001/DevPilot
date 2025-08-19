@@ -18,7 +18,11 @@
     "type": "git",
     "url": "git+https://github.com/LucasPaulo001/DevPilot.git"
   },
-  "keywords": [],
+  "keywords": [
+    "cli",
+    "devpilot-core",
+    "devpilot"
+  ],
   "author": "",
   "license": "MIT",
   "type": "module",

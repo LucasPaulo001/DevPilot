@@ -101,7 +101,6 @@ main();
       '@clack/prompts': '^0.11.0',
       chalk: '^5.5.0',
       express: '^5.1.0',
-      vitest: '^3.2.4',
     },
     devDependencies: {
       typescript: '^5.9.2',
@@ -109,6 +108,7 @@ main();
       '@types/express': '^5.0.3',
       '@types/chalk': '^0.4.31',
       '@types/node': '^24.2.1',
+      vitest: '^3.2.4',
     },
     keywords: ['cli', 'devpilot'],
     author: '',
@@ -206,7 +206,7 @@ commands:
 
   //Arquivos adicionais
   const defaultAchives = await multiselect({
-    message: 'Deseja adicionar os seguintes arquivos ao projeto?',
+    message: `Deseja adicionar os seguintes arquivos ao projeto? ${chalk.magenta.italic('Utilize o space para selecionar')}`,
     options: [
       { value: 'gitignore', label: '.gitignore (padrão node)' },
       { value: 'readme', label: 'README.md' },
