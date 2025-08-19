@@ -2,18 +2,14 @@ import { log, multiselect, spinner } from '@clack/prompts';
 import chalk from 'chalk';
 import path from 'path';
 import fs from 'fs';
-import { execSync } from 'child_process';
+import { exec } from 'child_process';
 
 //Estruturando testes no CLI
 export const testImplement = async (cliPath: string) => {
   try {
     const selectTests = await multiselect({
       message: 'Quais testes deseja implementar?',
-      options: [
-        { value: 'unitary', label: 'Teste unitário (Vitest)' },
-        { value: 'integration', label: 'Teste de integração (Vitest)' },
-        { value: 'system', label: 'Teste de sistema (execa)' },
-      ],
+      options: [{ value: 'unitary', label: 'Teste unitário (Vitest)' }],
     });
 
     //Criando pasta de testes
@@ -23,14 +19,6 @@ export const testImplement = async (cliPath: string) => {
     if (Array.isArray(selectTests)) {
       if (selectTests.includes('unitary')) {
         await unitaryTest(testsPath);
-      }
-
-      if (selectTests.includes('integration')) {
-        await integrationTest(testsPath);
-      }
-
-      if (selectTests.includes('system')) {
-        await systemTest(testsPath);
       }
 
       log.success(chalk.green.bold('🧪 Testes base estruturados...'));
@@ -50,7 +38,7 @@ const unitaryTest = async (testsPath: string) => {
   fs.mkdirSync(pathUnitaryTest, { recursive: true });
 
   //Estrutura do teste báse
-  const helloTest = path.join(pathUnitaryTest, 'hello.test.ts');
+  const helloTest = path.join(pathUnitaryTest, 'hello.spec.ts');
   const testeData = `import { describe, it, expect } from "vitest";
 import { hello } from "../../src/commands/hello.js";
 
@@ -68,16 +56,13 @@ import { hello } from "../../src/commands/hello.js";
 
   const s = spinner();
   s.start('Gerando o build do projeto...');
-  execSync(`npm run build`, { cwd: process.cwd() });
+
+  await new Promise<void>((resolve, reject) => {
+    exec(`npm run build`, { cwd: process.cwd() }, (err, stdout, stderr) => {
+      if (err) return reject(err);
+      console.log(stdout);
+      resolve();
+    });
+  });
   s.stop(chalk.green('Build gerado com sucesso!'));
-};
-
-const integrationTest = async (testsPath: string) => {
-  const pathIntegrationTest = path.join(testsPath, 'integration');
-  fs.mkdirSync(pathIntegrationTest, { recursive: true });
-};
-
-const systemTest = async (testsPath: string) => {
-  const pathSystemTest = path.join(testsPath, 'e2e');
-  fs.mkdirSync(pathSystemTest, { recursive: true });
 };

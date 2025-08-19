@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { intro, log, outro, select } from '@clack/prompts';
+import { intro, log, outro, select, spinner } from '@clack/prompts';
 import { createCLI } from '../core/createCLI.js';
 import yaml from 'js-yaml';
 import path from 'path';

@@ -45,6 +45,9 @@ const registerFlag = async (
 
   //Conteúdo base do arquivo da flag
   const flagData = `
+//Estruture essa função para exibir o conteúdo da flag
+
+//Você pode modificar o nome da flag, mas atenção às importações
 export const ${functionName} = () => {
   console.log("Executando ${flagName}");
 };`;
@@ -61,10 +64,12 @@ export const ${functionName} = () => {
     }
 
     const flagIf = `
+    //Flag ${flagName} gerada pelo Devpilot
     if (args.includes("${flagName}")) {
+      
       ${flagFileName}Flag();
       return true;
-    }`;
+    }\n`;
 
     if (!actionsContent.includes(`${flagFileName}Flag()`)) {
       actionsContent = actionsContent.replace(

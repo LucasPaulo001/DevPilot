@@ -1,6 +1,6 @@
-import { outro, intro, text, log, select, multiselect } from '@clack/prompts';
+import { outro, intro, text, log, spinner, multiselect } from '@clack/prompts';
 import chalk from 'chalk';
-import { execSync } from 'node:child_process';
+import { exec } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -29,6 +29,9 @@ export const createCLI = async () => {
       }
     },
   });
+
+  const s = spinner();
+  s.start("Gerando CLI...");
 
   //Comando base para o novo CLI criado
   const data = `#!/usr/bin/env node
@@ -184,7 +187,14 @@ commands:
   //Criando arquivo de flags para exemplo
   fs.writeFileSync(
     path.join(flagsPath, 'actions.ts'),
-    `export const processArgs = async (argv: string[]): Promise<boolean> => { 
+    `
+/*
+Aqui é onde ficarão configuradas as flags, ao adicionar uma flag padrão ou 
+Criar a própria
+
+Esse arquivo é onde todas as suas flags ficaram centralizadas
+*/    
+export const processArgs = async (argv: string[]): Promise<boolean> => { 
   try {
       const args = argv.slice(2);
   
@@ -197,12 +207,25 @@ commands:
 }`,
   );
 
+  s.stop("CLI gerado com sucesso");
+
   //Encaminhando a pasta do projeto para o build
   const cliPath = path.join(process.cwd(), String(pathName));
 
+
   //Instalando dependências do CLI
-  execSync('npm install', { cwd: cliPath, stdio: 'ignore' });
-  log.success(chalk.green.bold("Dependências instaladas com sucesso!"));
+  s.start("Instalando dependências...");
+  await new Promise<void>((resolve, reject) => {
+    exec('npm install', { cwd: cliPath }, (err, stdout, stderr) => {
+      if(err){
+        return reject(err);
+      }
+      console.log(stdout);
+      resolve();
+    });
+  })
+  
+  s.stop(chalk.green.bold("Dependências instaladas com sucesso!"));
 
   //Arquivos adicionais
   const defaultAchives = await multiselect({
@@ -231,8 +254,16 @@ commands:
   }
 
   // Gerando dist do CLI criado
-  execSync('npm run build', { cwd: cliPath, stdio: 'inherit' });
-  log.info(chalk.green('Gerando build do CLI...'));
+  s.start("Gerando build...");
+  await new Promise<void>((resolve, reject) => {
+    exec('npm run build', { cwd: cliPath }, (err, stdout, stderr) => {
+      if(err) return reject(err);
+      console.log(stdout);
+      resolve();
+    });
+  })
+  
+  s.stop(chalk.green('Gerando build do CLI...'));
 
   outro(
     chalk.whiteBright(`CLI criado com sucesso em: "${String(pathName)}"\n`),
