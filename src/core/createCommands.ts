@@ -42,4 +42,5 @@ export const newCommand_${id} = () => {
   log.info(chalk.green('Gerando build do CLI...'));
 
   log.success(chalk.green(`Arquivo de comando gerado em ${commandPath}!`));
+  return true;
 };

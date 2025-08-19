@@ -17,7 +17,7 @@ export const testImplement = async (cliPath: string) => {
     });
 
     //Criando pasta de testes
-    const testsPath = path.join(cliPath, 'src', 'tests');
+    const testsPath = path.join(cliPath, 'tests');
     fs.mkdirSync(testsPath, { recursive: true });
 
     if (Array.isArray(selectTests)) {
@@ -52,7 +52,7 @@ const unitaryTest = async (testsPath: string) => {
   //Estrutura do teste báse
   const helloTest = path.join(pathUnitaryTest, 'hello.test.ts');
   const testeData = `import { describe, it, expect } from "vitest";
-import { hello } from "../../commands/hello.js";
+import { hello } from "../../src/commands/hello.js";
 
 // Este é um exemplo de teste inicial
 // Você pode adaptar esse bloco para testar a saída real do seu comando

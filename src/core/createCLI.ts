@@ -237,10 +237,12 @@ commands:
   outro(
     chalk.whiteBright(`CLI criado com sucesso em: "${String(pathName)}"\n`),
   );
+
+  return true;
 };
 
 //Gerando arquivos padrão
-const generateArchive = async (archive: string, pathName: string) => {
+export const generateArchive = async (archive: string, pathName: string) => {
   const rootPath = path.join(process.cwd());
   if (archive === 'gitignore') {
     //Criação do gitignore

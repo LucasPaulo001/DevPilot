@@ -9,7 +9,11 @@
     "start": "node dist/cli/index.js",
     "prepublishOnly": "npm run build",
     "check:prettier": "npx prettier . --check",
-    "write:prettier": "npx prettier . --write"
+    "write:prettier": "npx prettier . --write",
+    "test:watch": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:system": "vitest run tests/e2e"
   },
   "bin": {
     "devpilot": "dist/cli/index.js"
@@ -36,11 +40,9 @@
     "boxen": "^8.0.1",
     "chalk": "^5.5.0",
     "cryptojs": "^2.5.3",
-    "execa": "^9.6.0",
     "express": "^5.1.0",
     "js-yaml": "^4.1.0",
     "ora": "^8.2.0",
-    "vitest": "^3.2.4",
     "zod": "^4.0.17"
   },
   "devDependencies": {
@@ -49,9 +51,12 @@
     "@types/express": "^5.0.3",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.2.1",
+    "execa": "^9.6.0",
     "prettier": "^3.6.2",
+    "strip-ansi": "^7.1.0",
     "tsx": "^4.20.4",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   },
   "files": [
     "dist/**/*"

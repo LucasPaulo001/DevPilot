@@ -61,7 +61,7 @@ const main = async () => {
           const fullPath = path.join(process.cwd(), f);
           const isDir = fs.statSync(fullPath).isDirectory();
           const isHidden = f.startsWith('.');
-          const ignored = ['node_modules', 'src', 'dist'];
+          const ignored = ['node_modules', 'src', 'dist', '__tests__'];
           return isDir && !isHidden && !ignored.includes(f);
         });
 

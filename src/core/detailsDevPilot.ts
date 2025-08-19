@@ -15,7 +15,7 @@ export const processArgs = async (argv: string[]): Promise<boolean> => {
     //Flag para ajuda
     if (args.includes('--help')) {
         await help();
-        process.exit(0);
+        return true;
     }
 
     //Flag para ver a versão do DevPilot
@@ -23,14 +23,14 @@ export const processArgs = async (argv: string[]): Promise<boolean> => {
         const pathPkg = path.resolve(__dirname, "../../../package.json");
         const pkg = JSON.parse(fs.readFileSync(pathPkg, 'utf-8'));
         console.log(`Versão do DevPilot: ${pkg.version}`);
-        process.exit(0);
+        return true;
     }
 
     //Flag para a documentação da aplicação
     if(args.includes("--doc")){
         console.log("📖 Documentação DevPilot-core:")
         console.log(chalk.magenta("https://github.com/LucasPaulo001/DevPilot/tree/feature-devp/configs"));
-        process.exit(0);
+        return true;
     }
 
     //Flag para atualizar o devpilot
@@ -38,7 +38,7 @@ export const processArgs = async (argv: string[]): Promise<boolean> => {
         log.info("Atualizando o Devpilot...");
         execSync(`npm install devpilot-core -g`, { stdio: "ignore" });
         log.success(chalk.green.bold("Devpilot atualizado com sucesso! 🚀"));
-        process.exit(0);
+        return true;
     }
     
 
