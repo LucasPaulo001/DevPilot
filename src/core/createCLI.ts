@@ -96,9 +96,9 @@ main();
       dev: 'tsx watch src/cli/index.ts',
       build: 'tsc',
       start: 'node dist/cli/index.js',
-      'test:unit': 'vitest run tests/unit',
-      'test:integration': 'vitest run tests/integration',
-      'test:system': 'vitest run tests/system',
+      'test:unit': 'vitest run __tests__/unit',
+      'test:integration': 'vitest run __tests__/integration',
+      'test:system': 'vitest run __tests__/system',
     },
     dependencies: {
       '@clack/prompts': '^0.11.0',
