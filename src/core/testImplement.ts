@@ -13,12 +13,12 @@ export const testImplement = async (cliPath: string) => {
     });
 
     //Criando pasta de testes
-    const testsPath = path.join(cliPath, 'tests');
+    const testsPath = path.join(cliPath, '__tests__');
     fs.mkdirSync(testsPath, { recursive: true });
 
     if (Array.isArray(selectTests)) {
       if (selectTests.includes('unitary')) {
-        await unitaryTest(testsPath);
+        await unitaryTest(testsPath, cliPath);
       }
 
       log.success(chalk.green.bold('🧪 Testes base estruturados...'));
@@ -32,7 +32,7 @@ export const testImplement = async (cliPath: string) => {
 };
 
 //Estruturando teste unitário
-const unitaryTest = async (testsPath: string) => {
+const unitaryTest = async (testsPath: string, cliPath: string) => {
   //Estruturando pastas para o teste
   const pathUnitaryTest = path.join(testsPath, 'unit');
   fs.mkdirSync(pathUnitaryTest, { recursive: true });
@@ -58,7 +58,7 @@ import { hello } from "../../src/commands/hello.js";
   s.start('Gerando o build do projeto...');
 
   await new Promise<void>((resolve, reject) => {
-    exec(`npm run build`, { cwd: process.cwd() }, (err, stdout, stderr) => {
+    exec(`npm run build`, { cwd:  cliPath }, (err, stdout, stderr) => {
       if (err) return reject(err);
       console.log(stdout);
       resolve();
