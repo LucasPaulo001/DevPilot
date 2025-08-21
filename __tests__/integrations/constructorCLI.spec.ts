@@ -5,14 +5,20 @@ import { createCLI } from '../../src/core/createCLI.js';
 import * as prompts from '@clack/prompts';
 
 // Mock do prompts primeiro
-vi.mock('@clack/prompts', () => ({
-  text: vi.fn().mockResolvedValue('meu-cli'),
-  multiselect: vi.fn().mockResolvedValue([]),
-  intro: vi.fn(),
-  outro: vi.fn(),
-  log: { info: vi.fn(), success: vi.fn() },
-  select: vi.fn()
-}));
+vi.mock('@clack/prompts', () => {
+  return {
+    intro: vi.fn(),
+    outro: vi.fn(),
+    log: { info: vi.fn(), success: vi.fn() },
+    text: vi.fn().mockResolvedValue('meu-cli'),
+    multiselect: vi.fn().mockResolvedValue([]),
+    select: vi.fn(),
+    spinner: vi.fn(() => ({
+      start: vi.fn(),
+      stop: vi.fn()
+    }))
+  };
+});
 
 let tempDir = '';
 
