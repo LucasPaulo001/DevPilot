@@ -11,8 +11,13 @@ vi.mock('@clack/prompts', () => {
     text: vi.fn().mockResolvedValue('meu-cli'),
     multiselect: vi.fn().mockResolvedValue([]),
     select: vi.fn(),
+    spinner: vi.fn(() => ({
+      start: vi.fn(),
+      stop: vi.fn()
+    }))
   };
 });
+
 
 import { createCLI } from '../../src/core/createCLI';
 
